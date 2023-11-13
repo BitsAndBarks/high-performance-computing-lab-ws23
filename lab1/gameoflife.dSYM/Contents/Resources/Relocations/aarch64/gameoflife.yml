@@ -1,0 +1,20 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     '/Users/stephaniehaun/Studium/WS23-24/HPC/Labor/lab1/gameoflife'
+relocations:
+  - { offsetInCU: 0x26, offset: 0x26, size: 0x8, addend: 0x0, symName: _myexit, symObjAddr: 0x0, symBinAddr: 0x10000313C, symSize: 0x38 }
+  - { offsetInCU: 0x4D, offset: 0x4D, size: 0x8, addend: 0x0, symName: _vtk_header_template, symObjAddr: 0xDC0, symBinAddr: 0x100008000, symSize: 0x0 }
+  - { offsetInCU: 0x6C, offset: 0x6C, size: 0x8, addend: 0x0, symName: _vtk_tail, symObjAddr: 0xDC8, symBinAddr: 0x100008008, symSize: 0x0 }
+  - { offsetInCU: 0x86, offset: 0x86, size: 0x8, addend: 0x0, symName: _vtk_header, symBinAddr: 0x100008010, symSize: 0x0 }
+  - { offsetInCU: 0xA4, offset: 0xA4, size: 0x8, addend: 0x0, symName: _myexit, symObjAddr: 0x0, symBinAddr: 0x10000313C, symSize: 0x38 }
+  - { offsetInCU: 0xD7, offset: 0xD7, size: 0x8, addend: 0x0, symName: _testLittleEndian, symObjAddr: 0x38, symBinAddr: 0x100003174, symSize: 0x4C }
+  - { offsetInCU: 0x10D, offset: 0x10D, size: 0x8, addend: 0x0, symName: _create_vtk_header, symObjAddr: 0x84, symBinAddr: 0x1000031C0, symSize: 0xB4 }
+  - { offsetInCU: 0x14D, offset: 0x14D, size: 0x8, addend: 0x0, symName: _write_vtk_data, symObjAddr: 0x138, symBinAddr: 0x100003274, symSize: 0x5C }
+  - { offsetInCU: 0x18D, offset: 0x18D, size: 0x8, addend: 0x0, symName: _write_field, symObjAddr: 0x194, symBinAddr: 0x1000032D0, symSize: 0x128 }
+  - { offsetInCU: 0x213, offset: 0x213, size: 0x8, addend: 0x0, symName: _evolve, symObjAddr: 0x2BC, symBinAddr: 0x1000033F8, symSize: 0x248 }
+  - { offsetInCU: 0x2FB, offset: 0x2FB, size: 0x8, addend: 0x0, symName: _filling_random, symObjAddr: 0x504, symBinAddr: 0x100003640, symSize: 0xE4 }
+  - { offsetInCU: 0x381, offset: 0x381, size: 0x8, addend: 0x0, symName: _filling_runner, symObjAddr: 0x5E8, symBinAddr: 0x100003724, symSize: 0x104 }
+  - { offsetInCU: 0x3DD, offset: 0x3DD, size: 0x8, addend: 0x0, symName: _apply_periodic_boundaries, symObjAddr: 0x6EC, symBinAddr: 0x100003828, symSize: 0x190 }
+  - { offsetInCU: 0x455, offset: 0x455, size: 0x8, addend: 0x0, symName: _game, symObjAddr: 0x87C, symBinAddr: 0x1000039B8, symSize: 0x120 }
+  - { offsetInCU: 0x4BF, offset: 0x4BF, size: 0x8, addend: 0x0, symName: _main, symObjAddr: 0x99C, symBinAddr: 0x100003AD8, symSize: 0x178 }
+...

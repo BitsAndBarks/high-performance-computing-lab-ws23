@@ -114,8 +114,39 @@ void write_field(number_type *currentfield, int width, int height, int timestep)
 
 
 void evolve(number_type *currentfield, number_type *newfield, int width, int height) {
-  // TODO traverse through each voxel and implement game of live logic
-  // HINT: avoid boundaries
+  /**
+   * navigate to current cell, remember its index, and start counter for living neighbours
+  */
+  for (int y = 1; y < height - 1; y++) {
+    for (int x = 1; x < width - 1; x++) {
+      int currentCellIndex = calcIndex(width, x, y);
+      int noOfLivingNeighbours = 0;
+
+      // count living neighbours around current cell
+      /** neighbour cell layout:
+       * (-1,-1)   (-1,0)    (-1,1)
+       * (0,-1)     (0,0)     (0,1)   <-- (0,0) is active cell, needs to be skipped
+       * (1,-1)     (1,0)     (1,1)
+      */
+      for (int dy = -1; dy <= 1; dy++) {
+        for (int dx = -1; dx <= 1; dx++) {
+          if (dx == 0 && dy == 0) continue; // skip the active cell
+          if (currentfield[calcIndex(width, x + dx, y + dy)] == ALIVE) {
+            noOfLivingNeighbours++;
+          }
+        }
+      }
+
+      /** if necessary, update state of current field according to rules:
+       * ALIVE && < 2 neighbours -> DEAD
+       * ALIVE && 2 or 3 neighbours -> stays ALIVE
+       * ALIVE && > 3 neighbours -> DEAD
+       * DEAD && == 3 neighbours -> ALIVE
+      */
+      newfield[currentCellIndex] = (currentfield[currentCellIndex] == ALIVE && (noOfLivingNeighbours == 2 || noOfLivingNeighbours == 3)) || 
+                        (currentfield[currentCellIndex] == DEAD && noOfLivingNeighbours == 3) ? ALIVE : DEAD;
+    }
+  }
 }
 
 void filling_random(number_type *currentfield, int width, int height) {
@@ -139,29 +170,43 @@ void filling_runner(number_type *currentfield, int width, int height) {
 }
 
 void apply_periodic_boundaries(number_type *field, int width, int height) {
-  // TODO: implement periodic boundary copies
+  /**
+   * the new field does not yet have the boundary logic implemented
+   * copies edges to all four sides of the field to implement periodic boundaries:
+  */
+    for (int y = 1; y < height - 1; y++) {
+        // copy left to right and right to left
+        field[calcIndex(width, 0, y)] = field[calcIndex(width, width - 2, y)];
+        field[calcIndex(width, width - 1, y)] = field[calcIndex(width, 1, y)];
+    }
+
+      for (int x = 0; x < width; x++) {
+        // copy top to bottom and bottom to top
+        field[calcIndex(width, x, 0)] = field[calcIndex(width, x, height - 2)];
+        field[calcIndex(width, x, height - 1)] = field[calcIndex(width, x, 1)];
+    }
 }
 
 void game(int width, int height, int num_timesteps) {
   number_type *currentfield = calloc(width * height, sizeof(number_type));
   number_type *newfield = calloc(width * height, sizeof(number_type));
 
-  // TODO 1: use your favorite filling
   // filling_random (currentfield, width, height);
   filling_runner(currentfield, width, height);
 
   int time = 0;
   write_field(currentfield, width, height, time);
-  // TODO 4: implement periodic boundary condition
   apply_periodic_boundaries(currentfield, width, height);
 
   for (time = 1; time <= num_timesteps; time++) {
-    // TODO 2: implement evolve function (see above)
     evolve(currentfield, newfield, width, height);
     write_field(newfield, width, height, time);
-    // TODO 4: implement periodic boundary condition
     apply_periodic_boundaries(newfield, width, height);
-    // TODO 3: implement SWAP of the fields
+
+    // swap fields by swapping the pointers
+    number_type *temp = currentfield;
+    currentfield = newfield;
+    newfield = temp;
   }
 
   free(currentfield);
@@ -189,6 +234,6 @@ int main(int c, char **v) {
     END_TIMEMEASUREMENT(measure_game_time, elapsed_time);
     printf("time elapsed: %lf sec\n", elapsed_time);
   } else {
-    myexit("Too less arguments, example: ./gameoflife <x size> <y size> <number of timesteps>");
+    myexit("Too few arguments, example: ./gameoflife <x size> <y size> <number of timesteps>");
   }
 }
