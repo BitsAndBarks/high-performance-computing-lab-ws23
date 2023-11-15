@@ -169,6 +169,28 @@ void filling_runner(number_type *currentfield, int width, int height) {
   currentfield[calcIndex(width, offset_x + 2, offset_y + 2)] = ALIVE;
 }
 
+// example implementation according to Abb. 1 assignment pdf
+void glider(number_type *currentfield, int width, int height) {
+  /**
+   * ! y-axis starts at bottom left
+   * upper left - (3,1)(4,2)(5,2)(3,3)(4,3)
+   * lower right - (10,9)(11,10)(12,10)(11,11)(12,9)
+  */
+  // upper left
+  currentfield[calcIndex(width, 3, 12)] = ALIVE;
+  currentfield[calcIndex(width, 4, 12)] = ALIVE;
+  currentfield[calcIndex(width, 4, 13)] = ALIVE;
+  currentfield[calcIndex(width, 5, 13)] = ALIVE;
+  currentfield[calcIndex(width, 3, 14)] = ALIVE;
+
+  // lower right
+  currentfield[calcIndex(width, 12, 4)] = ALIVE;
+  currentfield[calcIndex(width, 13, 2)] = ALIVE;
+  currentfield[calcIndex(width, 14, 3)] = ALIVE;
+  currentfield[calcIndex(width, 13, 3)] = ALIVE;
+  currentfield[calcIndex(width, 14, 4)] = ALIVE;
+}
+
 void apply_periodic_boundaries(number_type *field, int width, int height) {
   /**
    * the new field does not yet have the boundary logic implemented
@@ -193,6 +215,7 @@ void game(int width, int height, int num_timesteps) {
 
   // filling_random (currentfield, width, height);
   filling_runner(currentfield, width, height);
+  // glider(currentfield, width, height);
 
   int time = 0;
   write_field(currentfield, width, height, time);
@@ -200,8 +223,13 @@ void game(int width, int height, int num_timesteps) {
 
   for (time = 1; time <= num_timesteps; time++) {
     evolve(currentfield, newfield, width, height);
-    write_field(newfield, width, height, time);
+    write_field(newfield, width, height, time); // comment this out for performance analysis
     apply_periodic_boundaries(newfield, width, height);
+
+// for performance analysis, write only once - keep commented out otherwise
+    // if (time == 1) {
+    //   write_field(newfield, width, height, time);
+    // }
 
     // swap fields by swapping the pointers
     number_type *temp = currentfield;
@@ -233,7 +261,25 @@ int main(int c, char **v) {
 
     END_TIMEMEASUREMENT(measure_game_time, elapsed_time);
     printf("time elapsed: %lf sec\n", elapsed_time);
+
+  
+//  Console output for performance analysis. Keep commented in otherwise:    
+    // double memoryUsage = 2 * width * height * sizeof(number_type);
+    // printf("Memory Usage:%f\n", memoryUsage);
+
+    // int headerLength = strlen(vtk_header_template);
+    // int footerLength = strlen(vtk_tail);
+    // int dataSize = width * height * sizeof(number_type);
+    // u_long totalSize = headerLength + footerLength + dataSize;
+    // printf("Disk space calculation:\nHeader length: %lu + dynamic content\nFooter length: %lu\nData size: %d\n\nTOTAL SIZE: %lu + dynamic size of header\n", 
+    // strlen(vtk_header_template), strlen(vtk_tail), dataSize, totalSize);
+
+    // double ratio = (double)memoryUsage / (double) totalSize;
+    // printf("Ratio RAM:Filesize:%f\n", ratio);
+   
   } else {
     myexit("Too few arguments, example: ./gameoflife <x size> <y size> <number of timesteps>");
   }
 }
+
+// TODO: Laborlogbuch und mit time laufen lassen.
