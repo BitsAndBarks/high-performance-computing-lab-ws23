@@ -11,6 +11,14 @@
 // OPTIONAL: comment this out for console output
 //#define CONSOLE_OUTPUT
 
+/*
+workaround for clang error - use the following command to 'make gameoflife'
+
+/opt/homebrew/bin/gcc-13 -O3 -std=gnu99 -Wall -fopenmp -o gameoflife gameoflife.c
+
+*/ 
+
+
 #define calcIndex(width, x, y) ((y) * (width) + (x))
 #define ALIVE 1
 #define DEAD 0
@@ -205,7 +213,7 @@ int main(int c, char **v) {
       decomposition[Y] = atoi(v[5]); ///< read number of threads in y
     }
   } else {
-    myexit("Too less arguments");
+    myexit("Too few arguments");
   }
   double elapsed_time;
   START_TIMEMEASUREMENT(measure_game_time);
